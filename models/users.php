@@ -23,43 +23,43 @@ class Users{
 	public function check_rights(){
 		$query = "
 			SELECT DISTINCT 
-			((SELECT 1
+		((SELECT 1
 	        FROM users
 	        JOIN functions ON functions.user_id = users.functions_id
-			WHERE functions.name = :functions_name 
+		WHERE functions.name = :functions_name 
 	        AND users.nickname = :users_nickname)
 
 	    	OR 
 	        (SELECT 1
-			FROM groups
+		FROM groups
 	    	JOIN users ON groups.user_id = users.id
 	        JOIN functions ON functions.group_id = groups.id
-			WHERE functions.name = :functions_name
+		WHERE functions.name = :functions_name
 	        AND users.nickname = :users_nickname)
-			OR
+		OR
 
 	    	(SELECT 1
-			FROM  modules
-            JOIN users on users.id = modules.user_id
+		FROM  modules
+          	JOIN users on users.id = modules.user_id
            	JOIN functions on functions.module_name = 
-            (SELECT modules.name 
+          	(SELECT modules.name 
 	                FROM modules, users 
-	    			WHERE users.modules_id IN (modules.id))
+			WHERE users.modules_id IN (modules.id))
 	        AND functions.name  = :functions_name
 	        AND users.nickname = :users_nickname)
 
 	    	OR
 	    	(SELECT 1
-			FROM groups
-            JOIN users ON users.groups_id = groups.id
-            JOIN modules ON modules.group_id = groups.id
-            JOIN functions on functions.module_name = 
-            (SELECT modules.name 
-	                                FROM modules, groups 
-	    			    		    WHERE groups.module_id IN (modules.id))
+		FROM groups
+	        JOIN users ON users.groups_id = groups.id
+            	JOIN modules ON modules.group_id = groups.id
+            	JOIN functions on functions.module_name = 
+            	(SELECT modules.name 
+			FROM modules, groups 
+		    	WHERE groups.module_id IN (modules.id))
      		AND functions.name  = :functions_name
 	        AND users.nickname = :users_nickname)) as allowed
-  			FROM users
+		FROM users
    
 	 		";
 		$stmt = $this->conn->prepare($query);
