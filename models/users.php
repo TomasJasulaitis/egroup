@@ -25,7 +25,7 @@ class Users{
 			SELECT DISTINCT 
 		((SELECT 1
 	        FROM users
-	        JOIN functions ON functions.user_id = users.functions_id
+	        JOIN functions ON functions.user_id = users.id
 		WHERE functions.name = :functions_name 
 	        AND users.nickname = :users_nickname)
 
